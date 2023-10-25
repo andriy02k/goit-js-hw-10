@@ -14,25 +14,39 @@ const elements = {
     div: document.querySelector(".cat-info"),
 };
 
+elements.load.classList.add('is-hidden');
+elements.err.classList.add('is-hidden');
+elements.div.classList.add('is-hidden');
+
 elements.select.addEventListener('change', handlerSelect);
 
 function handlerSelect(evt) {
     const selected = evt.target.value;
+    elements.div.classList.add('is-hidden');
+    elements.load.classList.remove('is-hidden');
+
+
     fetchCatByBreed(selected)
-        .then(data => elements.div.innerHTML = createMarkup(data))
+        .then(data => {
+            elements.div.innerHTML = createMarkup(data);
+            elements.div.classList.remove('is-hidden');
+        })
         .catch(() => {
             Notiflix.Notify.failure(
                 'Oops! Something went wrong! Try reloading the page!', 
                 { timeout: 2000, userIcon: false }
             );
         })
+        .finally(() => {
+            elements.load.classList.add('is-hidden');
+        });
 };
 
 function createMarkup(arr) {
-    console.log(arr);
+    // console.log(arr);
     return arr
         .map(({ breeds: [{ name, description, temperament }], url }) => `
-    <div>
+    <div class = "container">
         <img src="${url}" alt="${name}" />
         <h2>${name}</h2>
         <p>${description}</p>
@@ -54,6 +68,9 @@ function fetchBreedsAndSetPetsList() {
                 'Oops! Something went wrong! Try reloading the page!', 
                 { timeout: 2000, userIcon: false }
             );
+        })
+        .finally(() => {
+            elements.load.classList.add('is-hidden');
         })
 };
 

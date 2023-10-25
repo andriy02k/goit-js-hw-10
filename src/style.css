@@ -1,0 +1,22 @@
+.is-hidden {
+    display: none;
+}
+
+img {
+    width: 800px;
+    display: block;
+}
+
+p {
+line-height: 1.9em;
+font-size: large;
+text-align: center;
+width: 800px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
