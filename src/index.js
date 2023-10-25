@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchBreeds, fetchCatByBreed } from "./cat-api";
+import { fetchBreeds, fetchCatByBreed } from "./js/cat-api";
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
 import Notiflix from 'notiflix';
@@ -14,22 +14,17 @@ const elements = {
     div: document.querySelector(".cat-info"),
 };
 
-elements.load.classList.add('is-hidden');
-elements.err.classList.add('is-hidden');
-elements.div.classList.add('is-hidden');
-
 elements.select.addEventListener('change', handlerSelect);
 
 function handlerSelect(evt) {
     const selected = evt.target.value;
-    elements.div.classList.add('is-hidden');
     elements.load.classList.remove('is-hidden');
-
+    elements.div.classList.add('is-hidden');
 
     fetchCatByBreed(selected)
         .then(data => {
             elements.div.innerHTML = createMarkup(data);
-            elements.div.classList.remove('is-hidden');
+
         })
         .catch(() => {
             Notiflix.Notify.failure(
@@ -39,6 +34,7 @@ function handlerSelect(evt) {
         })
         .finally(() => {
             elements.load.classList.add('is-hidden');
+            elements.div.classList.remove('is-hidden');
         });
 };
 
@@ -61,6 +57,8 @@ function fetchBreedsAndSetPetsList() {
         .then(result => {
             // console.log(result);
             getPetsList(result);
+
+            elements.select.classList.remove('is-hidden');
         })
         .then(() => new SlimSelect({ select: `.breed-select` }))
         .catch(() => {
